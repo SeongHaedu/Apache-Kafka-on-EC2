@@ -283,7 +283,7 @@ sudo ssh -L 8888:localhost:8888 -i "<your key>.pem" ec2-user@<your ec2 ip>.ap-no
 
 [kafka-python](https://kafka-python.readthedocs.io/en/master/) を使って、producer と consumer の client を作成します
 
-![kafka-python を使用したストリーミングデモ](./images/Apache-Kafka-by-haedu.mov)
+![デモ画像](./images/demo.png)
 
 左が producer、真ん中が consumer、右が Kafka UI です
 Producer が送信した文字列を consumer が受信していることを確認できます
