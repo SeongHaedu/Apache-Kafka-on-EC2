@@ -20,7 +20,6 @@
   - [Clean up](#Clean-up)
 
 ## 概要
----
 
 ![全体像](./images/Overview-of-Kafka.png)
 
@@ -41,7 +40,7 @@ EC2 で Docker を立ち上げ、上記の構成で下記を構築します。
 ※ 以降の作業は複数のターミナルでの作業をおすすめします（3 つの Broker、1 つの Kafka ui、Producer、および Consumer 用に 6 つのターミナルを立ち上げておくと楽でした）
 
 ## 準備
----
+
 ### EC2 インスタンスの起動と接続
 
 【手順】
@@ -214,7 +213,7 @@ KAFKA_ZOOKEEPER_CONNECT=${BROKER1}:2181,${BROKER2}:2181,${BROKER3}:2181
 各々のフォルダは後ほど起動するコンテナにそれぞれ volume がマウントされている
 
 ## Kafka cluster の作成の概要
----
+
 1. Apache Kafka を動作させるには Apache Zookeeper と接続をします
 
 2. 各ホストで Kafka を起動して cluster を構成します
@@ -257,7 +256,7 @@ docker compose -f ./src/compose.kafka.yml up -d
 3. 上記手順を `broker-2`、`broker-3` の各々のコンテナでも実行
 
 ## [Kafka UI](https://github.com/provectus/kafka-ui) の起動
----
+
 Kafka の中でも一番使いやすいと言われている Kafka UI を起動します
 
 【手順】
@@ -279,7 +278,7 @@ sudo ssh -L 8888:localhost:8888 -i "<your key>.pem" ec2-user@<your ec2 ip>.ap-no
 ![Kafka UIの画面](./images/kafka-ui.png)
 
 ## Client の作成の概要
----
+
 [kafka-python](https://kafka-python.readthedocs.io/en/master/) を使って、producer と consumer の client を作成します
 
 ![kafka-python を使用したストリーミングデモ](./images/Apache-Kafka-by-haedu.mov)
@@ -322,7 +321,7 @@ python /src/main.py --topic sample-topic --bootstrap-servers 172.18.0.2:9092,172
 ```
 
 ## Kafka cluster と client の動作確認
----
+
 1. Producer 側のターミナルで任意の文字列を入力し、Enter で Kafka cluster にメッセージを送信します
 
 2. Consumer 側のターミナルで Kafka cluster のメッセージを読み込み、メッセージが出力されます
@@ -333,7 +332,7 @@ python /src/main.py --topic sample-topic --bootstrap-servers 172.18.0.2:9092,172
 指定して実行すると Kafka UI の consumer 一覧に表示されるようになります
 
 ## Clean up
----
+
 全てのコンテナを落として終了です
 
 ```shell
