@@ -1,5 +1,7 @@
 # EC2 の Docker 上に Apache Kafka cluster を構築する方法
 
+![apache-kafka](./images/apache-kafka.png)
+
 - [EC2 の Docker 上に Apache Kafka cluster を構築する方法](#EC2-の-Docker-上に-Apache-Kafka-cluster-を構築する方法)
   - [概要](#概要)
   - [準備](#準備)
@@ -220,7 +222,6 @@ KAFKA_ZOOKEEPER_CONNECT=${BROKER1}:2181,${BROKER2}:2181,${BROKER3}:2181
 
 
 ### ZooKeeper cluster の作成
-![ZooKeeper](./images/Apache-ZooKeeper.svg.png)
 ZooKeeper を `broker-1`、`broker-2`、`broker-3` で起動し、 クラスターを構成する
 
 【手順】
@@ -239,7 +240,6 @@ docker compose -f ./src/compose.zookeeper.yml up -d
 3. 上記手順を `broker-2`、`broker-3` の各々のコンテナでも実行
 
 ### Kafka cluster の作成
-![Kafka](./images/apache-kafka.webp)
 Kafka を `broker-1`、`broker-2`、`broker-3` で起動し、cluster を構成する
 
 【手順】
