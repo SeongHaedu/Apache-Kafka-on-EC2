@@ -10,7 +10,7 @@
     - [GitHub の clone](#GitHub-の-clone)
     - [コンテナの作成と Kafka の初期設定](#コンテナの作成と-Kafka-の初期設定)
   - [Kafka cluster の作成の概要](#kafka-cluster-の作成の概要)
-    - [Zookeeper cluster の作成](#zookeeper-cluster-の作成)
+    - [ZooKeeper cluster の作成](#zookeeper-cluster-の作成)
     - [Kafak cluster の作成](#kafka-cluster-の作成)
   - [Kafka UI の起動](#Kafka-UI-の起動)
   - [Client の作成の概要](#Client-の作成の概要)
@@ -25,7 +25,7 @@
 
 EC2 で Docker を立ち上げ、上記の構成で下記を構築します。
 
-- Kafka cluster (Broker × 3, Zookeeper × 3)
+- Kafka cluster (Broker × 3, ZooKeeper × 3)
 - Kafka client (Producer × 1, Consumer × 1)
 - Kafka UI
 
@@ -214,23 +214,24 @@ KAFKA_ZOOKEEPER_CONNECT=${BROKER1}:2181,${BROKER2}:2181,${BROKER3}:2181
 
 ## Kafka cluster の作成の概要
 
-1. Apache Kafka を動作させるには Apache Zookeeper と接続をします
+1. Apache Kafka を動作させるには Apache ZooKeeper と接続をします
 
 2. 各ホストで Kafka を起動して cluster を構成します
 
 
-### Zookeeper cluster の作成
-Zookeeper を `broker-1`、`broker-2`、`broker-3` で起動し、 クラスターを構成する
+### ZooKeeper cluster の作成
+![ZooKeeper](./images/Apache-ZooKeeper.svg.png)
+ZooKeeper を `broker-1`、`broker-2`、`broker-3` で起動し、 クラスターを構成する
 
 【手順】
 1. Broker のコンテナへの接続
-Zookeeper の起動順序は特に指定はない
+ZooKeeper の起動順序は特に指定はない
 Broker の各々のコンテナへの接続
 例えば、`brocker-1` の場合は以下のようにコマンドを実行
 ```shell
 docker exec -it broker-1 sh
 ```
-2. Zookeeper の起動
+2. ZooKeeper の起動
 接続したコンテナで下記のコマンドを実行
 ```shell
 docker compose -f ./src/compose.zookeeper.yml up -d
@@ -238,10 +239,11 @@ docker compose -f ./src/compose.zookeeper.yml up -d
 3. 上記手順を `broker-2`、`broker-3` の各々のコンテナでも実行
 
 ### Kafka cluster の作成
+![Kafka](./images/apache-kafka.webp)
 Kafka を `broker-1`、`broker-2`、`broker-3` で起動し、cluster を構成する
 
 【手順】
-1. Broker のコンテナへの接続（Zookeeper cluster の作成の手順で接続ずみの場合スキップ）
+1. Broker のコンテナへの接続（ZooKeeper cluster の作成の手順で接続ずみの場合スキップ）
 Kafka も同様に起動順序について特に指定はない
 Broker の各々のコンテナに入る
 例えば、`brocker-1` の場合は以下のようにコマンドを実行
