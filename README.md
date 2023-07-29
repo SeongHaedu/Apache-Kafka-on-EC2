@@ -21,6 +21,7 @@
   - [Clean up](#Clean-up)
 
 ## 概要
+---
 
 ![全体像](./images/Overview-of-Kafka.png)
 
