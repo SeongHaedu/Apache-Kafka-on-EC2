@@ -129,8 +129,8 @@ sudo yum install git -y
 ```
 2. GitHub のリポジトリを clone
 ```shell
-git clone https://github.com/SeongHaedu/kafka-training.git
-cd kafka-training
+git clone git@github.com:SeongHaedu/Apache-Kafka-on-EC2.git
+cd Apache-Kafka-on-EC2
 ```
 
 ### コンテナの作成と Kafka の初期設定
