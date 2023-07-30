@@ -337,9 +337,17 @@ https://github.com/SeongHaedu/Apache-Kafka-on-EC2/assets/43167769/c6505a16-99fc-
 また、 `--group-id` で consumer group ID を指定できます
 指定して実行すると Kafka UI の consumer 一覧に表示されるようになります
 
+### Troubleshooting FAQ
+Q. Producer から Broker へメッセージが届いていない
+A. Kafka クラスターが立ち上がっていない可能性、があるので、`broker-1`、`broker-2`、`broker-3` に再度接続し、実行してください
+詳細の手順については、[ZooKeeper cluster の作成](#ZooKeeper-cluster-の作成)、および [Kafka cluster の作成](#Kafka-cluster-の作成) をご覧ください
+
+Q. Kafka UI に接続できない
+A. Kafka UI のコンテナが立ち上がっていない可能性、および SSH tunnel が確立されていない可能性が考えられるので、ご確認ください
+
 ## Clean up
 
-全てのコンテナを落として終了です
+全てのコンテナを落とし、EC2 インスタンスを削除して終了です
 
 ```shell
 docker compose down
