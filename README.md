@@ -46,6 +46,7 @@ EC2 で Docker を立ち上げ、上記の構成で下記を構築します。
 
 【手順】
 1. マネージメントコンソール画面から EC2 インスタンスを起動
+
 （Kafka cluster を構築するため、大きめのインスタンスタイプとストレージがおすすめ）
 ```EC2 の環境
 AMI: Amazon Linux 2023
@@ -102,6 +103,7 @@ docker-compose --version
 ### sudo なしで docker コマンドの実行するための設定
 
 【手順】
+
 1. Docker daemon の起動
 ```shell
 sudo service docker start
@@ -123,6 +125,7 @@ sudo service docker restart
 ### GitHub の clone
 
 【手順】
+
 1. git のインストール
 ```shell
 sudo yum install git -y
@@ -136,12 +139,15 @@ cd Apache-Kafka-on-EC2
 ### コンテナの作成と Kafka の初期設定
 
 【手順】
+
 1. docker-compose の実行
+
 複数のコンテナを立ち上げ、複数のサーバーが同一ネットワークにいる環境を仮想的に作成
 ```shell
 docker compose up -d
 ```
 2. 各々のコンテナの IP address の確認
+
 私の実行環境では以下のような IP address が割り振られた
 ```shell
 docker ps -q | xargs -n 1 docker inspect --format '{{ .Name }} {{range .NetworkSettings.Networks}} {{.IPAddress}}{{end}}' | sed 's#^/##' | sort -k 2
@@ -153,7 +159,9 @@ docker ps -q | xargs -n 1 docker inspect --format '{{ .Name }} {{range .NetworkS
 >>>producer  172.18.0.6
 >>>consumer  172.18.0.7
 ```
-※ 以降の作業は複数のターミナルで EC2 インスタンスへログインしての作業をおすすめします（3 つの Broker、1 つの Kafka ui、Producer、Consumer、および SSH tunnel 用として合計 7 つのターミナルを立ち上げておくと楽でした）
+※ 以降の作業は複数のターミナルで EC2 インスタンスへログインしての作業をおすすめします
+
+（3 つの Broker、1 つの Kafka ui、Producer、Consumer、および SSH tunnel 用として合計 7 つのターミナルを立ち上げておくと楽でした）
 
 3. `kafka` と `client` の直下の各々のディレクトリに存在する、`.env.template` を `.env` ファイルとしてコピーして保存する。
 ```shell
@@ -214,6 +222,7 @@ KAFKA_ZOOKEEPER_CONNECT=${BROKER1}:2181,${BROKER2}:2181,${BROKER3}:2181
 ※ `BROKER1`、`BROKER2`、および `BROKER3` 以外の記述は、各々の .env ファイルによって異なる
 
 これで準備完了
+
 各々のフォルダは後ほど起動するコンテナにそれぞれ volume がマウントされている
 
 ## Kafka cluster の作成の概要
@@ -227,14 +236,19 @@ KAFKA_ZOOKEEPER_CONNECT=${BROKER1}:2181,${BROKER2}:2181,${BROKER3}:2181
 ZooKeeper を `broker-1`、`broker-2`、`broker-3` で起動し、 クラスターを構成する
 
 【手順】
+
 1. Broker のコンテナへの接続
+
 ZooKeeper の起動順序は特に指定はない
+
 Broker の各々のコンテナへの接続
+
 例えば、`brocker-1` の場合は以下のようにコマンドを実行
 ```shell
 docker exec -it broker-1 sh
 ```
 2. ZooKeeper の起動
+
 接続したコンテナで下記のコマンドを実行
 ```shell
 docker compose -f ./src/compose.zookeeper.yml up -d
@@ -246,13 +260,17 @@ Kafka を `broker-1`、`broker-2`、`broker-3` で起動し、cluster を構成�
 
 【手順】
 1. Broker のコンテナへの接続（ZooKeeper cluster の作成の手順で接続ずみの場合スキップ）
+
 Kafka も同様に起動順序について特に指定はない
+
 Broker の各々のコンテナに入る
+
 例えば、`brocker-1` の場合は以下のようにコマンドを実行
 ```shell
 docker exec -it broker-1 sh
 ```
 2. Kafka の起動
+
 接続したコンテナで下記のコマンドを実行
 ```shell
 docker compose -f ./src/compose.kafka.yml up -d
@@ -266,11 +284,13 @@ docker compose -f ./src/compose.kafka.yml up -d
 Kafka の中でも一番使いやすいと言われている Kafka UI を起動します
 
 【手順】
+
 1. UI 起動用のコンテナへの接続
 ```shell
 docker exec -it kafka-ui sh
 ```
 2. Kafka UI の起動
+
 接続したコンテナで下記のコマンドを実行
 ```shell
 docker compose -f ./src/compose.ui.yml up -d
@@ -288,6 +308,7 @@ sudo ssh -L 8888:localhost:8888 -i "<your key>.pem" ec2-user@<your ec2 ip>.ap-no
 ![デモ画像](./images/demo.png)
 
 左が producer、真ん中が consumer、右が Kafka UI です
+
 Producer が送信した文字列を consumer が受信していることを確認できます
 
 ### Producer の作成
@@ -310,6 +331,7 @@ python /src/main.py --topic haedu-topic --bootstrap-servers 172.18.0.2:9092,172.
 ### Consumer の作成
 
 【手順】
+
 1. Consumer のコンテナへの接続
 ```shell
 docker exec -it consumer sh
@@ -335,14 +357,18 @@ https://github.com/SeongHaedu/Apache-Kafka-on-EC2/assets/43167769/c6505a16-99fc-
 3. Kafka UI で、 Kafka cluster に到達したメッセージを確認できます
 
 また、 `--group-id` で consumer group ID を指定できます
+
 指定して実行すると Kafka UI の consumer 一覧に表示されるようになります
 
 ### Troubleshooting FAQ
 Q. Producer から Broker へメッセージが届いていない
+
 A. Kafka クラスターが立ち上がっていない可能性、があるので、`broker-1`、`broker-2`、`broker-3` に再度接続し、実行してください
+
 詳細の手順については、[ZooKeeper cluster の作成](#ZooKeeper-cluster-の作成)、および [Kafka cluster の作成](#Kafka-cluster-の作成) をご覧ください
 
 Q. Kafka UI に接続できない
+
 A. Kafka UI のコンテナが立ち上がっていない可能性、および SSH tunnel が確立されていない可能性が考えられるので、ご確認ください
 
 ## Clean up
