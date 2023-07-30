@@ -153,7 +153,7 @@ docker ps -q | xargs -n 1 docker inspect --format '{{ .Name }} {{range .NetworkS
 >>>producer  172.18.0.6
 >>>consumer  172.18.0.7
 ```
-※ 以降の作業は複数のターミナルで EC2 インスタンスへログインしての作業をおすすめします（3 つの Broker、1 つの Kafka ui、Producer、および Consumer 用に 6 つのターミナルを立ち上げておくと楽でした）
+※ 以降の作業は複数のターミナルで EC2 インスタンスへログインしての作業をおすすめします（3 つの Broker、1 つの Kafka ui、Producer、Consumer、および SSH tunnel 用として合計 7 つのターミナルを立ち上げておくと楽でした）
 
 3. `kafka` と `client` の直下の各々のディレクトリに存在する、`.env.template` を `.env` ファイルとしてコピーして保存する。
 ```shell
@@ -261,6 +261,8 @@ docker compose -f ./src/compose.kafka.yml up -d
 
 ## [Kafka UI](https://github.com/provectus/kafka-ui) の起動
 
+![Kafka UIの画面](./images/haedu-topic.png)
+
 Kafka の中でも一番使いやすいと言われている Kafka UI を起動します
 
 【手順】
@@ -278,8 +280,6 @@ docker compose -f ./src/compose.ui.yml up -d
 sudo ssh -L 8888:localhost:8888 -i "<your key>.pem" ec2-user@<your ec2 ip>.ap-northeast-1.compute.amazonaws.com
 ```
 `localhost:8888` へアクセスすると Kafka UI が表示
-
-![Kafka UIの画面](./images/kafka-ui.png)
 
 ## Client の作成の概要
 
