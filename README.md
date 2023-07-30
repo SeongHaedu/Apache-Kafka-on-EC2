@@ -326,6 +326,8 @@ python /src/main.py --topic haedu-topic --bootstrap-servers 172.18.0.2:9092,172.
 
 ## Kafka cluster と client の動作確認
 
+https://github.com/SeongHaedu/Apache-Kafka-on-EC2/assets/43167769/c6505a16-99fc-4f67-af0b-a7cb5cf80707
+
 1. Producer 側のターミナルで任意の文字列を入力し、Enter で Kafka cluster にメッセージを送信します
 
 2. Consumer 側のターミナルで Kafka cluster のメッセージを読み込み、メッセージが出力されます
