@@ -36,10 +36,9 @@ EC2 で Docker を立ち上げ、上記の構成で下記を構築します。
 - AMI: Amazon Linux 2023
   - インスタンスタイプ: t2.xlarge
   - ボリュームサイズ: 20 (GiB)
+  - ルートボリューム: gp3
 - Docker: 20.10.25
 - Docker Compose: v2.4.1
-
-※ 以降の作業は複数のターミナルでの作業をおすすめします（3 つの Broker、1 つの Kafka ui、Producer、および Consumer 用に 6 つのターミナルを立ち上げておくと楽でした）
 
 ## 準備
 
@@ -52,6 +51,7 @@ EC2 で Docker を立ち上げ、上記の構成で下記を構築します。
 AMI: Amazon Linux 2023
 インスタンスタイプ: t2.xlarge
 ボリュームサイズ: 20 (GiB)
+ルートボリューム: gp3
 ```
 2. EC2 インスタンスの SSH 接続
 ```shell
@@ -129,7 +129,7 @@ sudo yum install git -y
 ```
 2. GitHub のリポジトリを clone
 ```shell
-git clone git@github.com:SeongHaedu/Apache-Kafka-on-EC2.git
+git clone https://github.com/SeongHaedu/Apache-Kafka-on-EC2.git
 cd Apache-Kafka-on-EC2
 ```
 
@@ -153,6 +153,8 @@ docker ps -q | xargs -n 1 docker inspect --format '{{ .Name }} {{range .NetworkS
 >>>producer  172.18.0.6
 >>>consumer  172.18.0.7
 ```
+※ 以降の作業は複数のターミナルで EC2 インスタンスへログインしての作業をおすすめします（3 つの Broker、1 つの Kafka ui、Producer、および Consumer 用に 6 つのターミナルを立ち上げておくと楽でした）
+
 3. `kafka` と `client` の直下の各々のディレクトリに存在する、`.env.template` を `.env` ファイルとしてコピーして保存する。
 ```shell
 $ tree -a ./kafka
@@ -302,7 +304,7 @@ pip install -r /src/requirements.txt
 3. Producer を起動
 `--bootstrap-servers` の部分は自身の環境の Broker の IP address を記入して実行
 ```shell
-python /src/main.py --topic sample-topic --bootstrap-servers 172.18.0.2:9092,172.18.0.3:9092,172.18.0.4:9092
+python /src/main.py --topic haedu-topic --bootstrap-servers 172.18.0.2:9092,172.18.0.3:9092,172.18.0.4:9092
 ```
 
 ### Consumer の作成
@@ -319,7 +321,7 @@ pip install -r /src/requirements.txt
 3. Consumer を起動
 `--bootstrap-servers` の部分は自身の環境の Broker の IP address を記入して実行
 ```shell
-python /src/main.py --topic sample-topic --bootstrap-servers 172.18.0.2:9092,172.18.0.3:9092,172.18.0.4:9092
+python /src/main.py --topic haedu-topic --bootstrap-servers 172.18.0.2:9092,172.18.0.3:9092,172.18.0.4:9092
 ```
 
 ## Kafka cluster と client の動作確認
